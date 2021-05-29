@@ -19,7 +19,7 @@
 
 """
 
-from __future__ import generators, division
+
 
 from logilab.common.compat import set, sorted
 
@@ -196,7 +196,8 @@ class FiniteIntervalDistributor(AbstractDistributor):
     def _distribute(self, dom1, dom2):
         variable = self.findSmallestDomain(dom1)
         if self.verbose:
-            print 'Distributing domain for variable', variable
+            __fmt_str = 'Distributing domain for variable'
+            print(__fmt_str , variable)
         splitted = dom1[variable]
         cpy1 = splitted.copy()
         cpy2 = splitted.copy()

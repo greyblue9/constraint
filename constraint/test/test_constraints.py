@@ -39,8 +39,8 @@ class AbstractConstraintTC(unittest.TestCase):
     def testRelevance(self):
         """tests that relevant variables are relevant"""
         for v in self.relevant_variables:
-            self.assert_(self.constraint.isVariableRelevant(v))
-        self.failIf(self.constraint.isVariableRelevant(self.irrelevant_variable))
+            self.assertTrue(self.constraint.isVariableRelevant(v))
+        self.assertFalse(self.constraint.isVariableRelevant(self.irrelevant_variable))
         
 
     def testNarrowing(self):
@@ -51,7 +51,7 @@ class AbstractConstraintTC(unittest.TestCase):
     def testEntailment(self):
         """tests that narrowing is performed correctly"""
         entailed = self.constraint.narrow(self.entailed_domains)
-        self.assert_(entailed)
+        self.assertTrue(entailed)
 
 class AllDistinctTC(AbstractConstraintTC):
     def setUp(self):
@@ -70,9 +70,9 @@ class AllDistinctTC(AbstractConstraintTC):
         vx = self.domains['x'].getValues()
         vy = self.domains['y'].getValues()
         vz = self.domains['z'].getValues()
-        self.assert_( 1 in vx and 2 in vx)
-        self.assert_( 1 in vy and 3 in vy)
-        self.assert_( 1 in vz and 4 in vz)
+        self.assertTrue( 1 in vx and 2 in vx)
+        self.assertTrue( 1 in vy and 3 in vy)
+        self.assertTrue( 1 in vz and 4 in vz)
 
     def testNarrowing2(self):
         domains = {'x':fd.FiniteDomain((1,2)),
@@ -82,10 +82,10 @@ class AllDistinctTC(AbstractConstraintTC):
         vx = domains['x'].getValues()
         vy = domains['y'].getValues()
         vz = domains['z'].getValues()
-        self.assert_(entailed)
-        self.assert_(2 in vx)
-        self.assert_(1 in vy)
-        self.assert_(4 in vz)
+        self.assertTrue(entailed)
+        self.assertTrue(2 in vx)
+        self.assertTrue(1 in vy)
+        self.assertTrue(4 in vz)
 
     def testNarrowing3(self):
         domains = {'x':fd.FiniteDomain((1,)),
@@ -95,10 +95,10 @@ class AllDistinctTC(AbstractConstraintTC):
         vx = domains['x'].getValues()
         vy = domains['y'].getValues()
         vz = domains['z'].getValues()
-        self.assert_(not entailed)
-        self.assert_(1 in vx, str(vx))
-        self.assert_(2 in vy, str(vy))
-        self.assert_(4 in vz and 3 in vz, str(vz))
+        self.assertTrue(not entailed)
+        self.assertTrue(1 in vx, str(vx))
+        self.assertTrue(2 in vy, str(vy))
+        self.assertTrue(4 in vz and 3 in vz, str(vz))
 
     def testNarrowing4(self):
         domains = {'x':fd.FiniteDomain((1,)),
@@ -107,19 +107,19 @@ class AllDistinctTC(AbstractConstraintTC):
                    't':fd.FiniteDomain((2,5,4)),
                    'u':fd.FiniteDomain((1,2,4)),
                    }
-        constraint = fd.AllDistinct(domains.keys())
+        constraint = fd.AllDistinct(list(domains.keys()))
         entailed = constraint.narrow(domains)
         vx = domains['x'].getValues()
         vy = domains['y'].getValues()
         vz = domains['z'].getValues()
         vt = domains['t'].getValues()
         vu = domains['u'].getValues()
-        self.failUnless(entailed)
-        self.assertEquals([1],  vx)
-        self.assertEquals([2], vy)
-        self.assertEquals([3], vz)
-        self.assertEquals([5], vt)
-        self.assertEquals([4], vu)
+        self.assertTrue(entailed)
+        self.assertEqual([1],  vx)
+        self.assertEqual([2], vy)
+        self.assertEqual([3], vz)
+        self.assertEqual([5], vt)
+        self.assertEqual([4], vu)
 
     def testFailure1(self):
         domains = {'x':fd.FiniteDomain((1,2)),
@@ -162,7 +162,7 @@ class UnaryMathConstrTC(AbstractConstraintTC):
         self.irrelevant_variable = 'tagada'
         self.constraint = fd.make_expression(self.relevant_variables,
                                              'x==2')
-        self.domains = {'x':fd.FiniteDomain(range(4))}
+        self.domains = {'x':fd.FiniteDomain(list(range(4)))}
         self.entailed_domains = {'x':fd.FiniteDomain([2])}
     def narrowingAssertions(self):
         v = list(self.domains['x'].getValues())
@@ -175,8 +175,8 @@ class BinaryMathConstrTC(AbstractConstraintTC):
         self.irrelevant_variable = 'tagada'
         self.constraint = fd.make_expression(self.relevant_variables,
                                              'x+y==2')
-        self.domains = {'x':fd.FiniteDomain(range(4)),
-                        'y':fd.FiniteDomain(range(2))}
+        self.domains = {'x':fd.FiniteDomain(list(range(4))),
+                        'y':fd.FiniteDomain(list(range(2)))}
         self.entailed_domains = {'x':fd.FiniteDomain([2]),
                                  'y':fd.FiniteDomain([0])}
     def narrowingAssertions(self):
@@ -193,9 +193,9 @@ class TernaryMathConstrTC(AbstractConstraintTC):
         self.irrelevant_variable = 'tagada'
         self.constraint = fd.make_expression(self.relevant_variables,
                                              'x+y==2 and z>1')
-        self.domains = {'x':fd.FiniteDomain(range(4)),
-                        'y':fd.FiniteDomain(range(3)),
-                        'z':fd.FiniteDomain(range(4))}
+        self.domains = {'x':fd.FiniteDomain(list(range(4))),
+                        'y':fd.FiniteDomain(list(range(3))),
+                        'z':fd.FiniteDomain(list(range(4)))}
         self.entailed_domains = {'x':fd.FiniteDomain([2]),
                                  'y':fd.FiniteDomain([0]),
                                  'z':fd.FiniteDomain([2,3]),}
@@ -246,7 +246,7 @@ class AbstractBasicConstraintTC(unittest.TestCase):
 class EqualsConstrTC(AbstractBasicConstraintTC):
     def setUp(self):
         self.constraint = fd.Equals('x',1)
-        self.domains = {'x':fd.FiniteDomain(range(3))}
+        self.domains = {'x':fd.FiniteDomain(list(range(3)))}
 
     def narrowingAssertions(self):
         v = list(self.domains['x'].getValues())
@@ -256,7 +256,7 @@ class EqualsConstrTC(AbstractBasicConstraintTC):
 class NotEqualsConstrTC(AbstractBasicConstraintTC):
     def setUp(self):
         self.constraint = fd.NotEquals('x',1)
-        self.domains = {'x':fd.FiniteDomain(range(3))}
+        self.domains = {'x':fd.FiniteDomain(list(range(3)))}
 
     def narrowingAssertions(self):
         v = list(self.domains['x'].getValues())
@@ -266,7 +266,7 @@ class NotEqualsConstrTC(AbstractBasicConstraintTC):
 class LesserThanConstrTC(AbstractBasicConstraintTC):
     def setUp(self):
         self.constraint = fd.LesserThan('x',1)
-        self.domains = {'x':fd.FiniteDomain(range(3))}
+        self.domains = {'x':fd.FiniteDomain(list(range(3)))}
 
     def narrowingAssertions(self):
         v = list(self.domains['x'].getValues())
@@ -276,7 +276,7 @@ class LesserThanConstrTC(AbstractBasicConstraintTC):
 class LesserOrEqualConstrTC(AbstractBasicConstraintTC):
     def setUp(self):
         self.constraint = fd.LesserOrEqual('x',1)
-        self.domains = {'x':fd.FiniteDomain(range(3))}
+        self.domains = {'x':fd.FiniteDomain(list(range(3)))}
 
     def narrowingAssertions(self):
         v = list(self.domains['x'].getValues())
@@ -286,7 +286,7 @@ class LesserOrEqualConstrTC(AbstractBasicConstraintTC):
 class GreaterThanConstrTC(AbstractBasicConstraintTC):
     def setUp(self):
         self.constraint = fd.GreaterThan('x',1)
-        self.domains = {'x':fd.FiniteDomain(range(3))}
+        self.domains = {'x':fd.FiniteDomain(list(range(3)))}
 
     def narrowingAssertions(self):
         v = list(self.domains['x'].getValues())
@@ -296,7 +296,7 @@ class GreaterThanConstrTC(AbstractBasicConstraintTC):
 class GreaterOrEqualConstrTC(AbstractBasicConstraintTC):
     def setUp(self):
         self.constraint = fd.GreaterOrEqual('x',1)
-        self.domains = {'x':fd.FiniteDomain(range(3))}
+        self.domains = {'x':fd.FiniteDomain(list(range(3)))}
 
     def narrowingAssertions(self):
         v = list(self.domains['x'].getValues())
@@ -310,7 +310,7 @@ def get_all_cases(module):
     all_cases = []
     for name in dir(module):
         obj = getattr(module, name)
-        if type(obj) in (types.ClassType, types.TypeType) and \
+        if type(obj) in (type, type) and \
                issubclass(obj, unittest.TestCase) and \
                not name.startswith('Abstract'):
             all_cases.append(obj)

@@ -23,7 +23,7 @@ from logilab.constraint import *
 from logilab.constraint.distributors import EnumeratorDistributor
 
 import os, sys
-from cStringIO import StringIO
+from io import StringIO
 
 class Queens8_TC(TestCase):
     size = 8

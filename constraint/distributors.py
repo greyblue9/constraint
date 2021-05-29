@@ -96,7 +96,8 @@ class NaiveDistributor(AbstractDistributor):
         variable = self.findSmallestDomain(dom1)
         values = dom1[variable].getValues()
         if self.verbose:
-            print 'Distributing domain for variable', variable, \
+            __fmt_str = 'Distributing domain for variable'
+            print(__fmt_str , variable, \)
                   'at value', values[0]
         dom1[variable].removeValues(values[1:])
         dom2[variable].removeValue(values[0])
@@ -117,7 +118,8 @@ class RandomizingDistributor(AbstractDistributor):
         distval = random.choice(values)
         values.remove(distval)
         if self.verbose:
-            print 'Distributing domain for variable', variable, \
+            __fmt_str = 'Distributing domain for variable'
+            print(__fmt_str , variable, \)
                   'at value', distval
         dom1[variable].removeValues(values)
         dom2[variable].removeValue(distval)
@@ -151,7 +153,8 @@ class SplitDistributor(AbstractDistributor):
                    int(math.floor((index + 1) * nb_elts)))
                   for index in range(nb_subspaces)]
         if self.verbose:
-            print 'Distributing domain for variable', variable
+            __fmt_str = 'Distributing domain for variable'
+            print(__fmt_str , variable)
         modified = []
         for (dom, (end, start)) in zip(args, slices) :
             dom[variable].removeValues(values[:end])

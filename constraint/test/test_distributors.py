@@ -19,6 +19,7 @@
 
 import unittest
 from logilab.constraint import distributors,fd
+from functools import reduce
 
 
 class AbstractDistributorTC(unittest.TestCase):
@@ -50,14 +51,14 @@ class AbstractDistributorTC(unittest.TestCase):
         """tests that the smallest domain is indeed the smallest one
         with at least 2 values inside"""
         dist = self.buildDistributor()
-        self.assertEquals('v2', dist.findSmallestDomain(self.domains1))
-        self.assertEquals('v2', dist.findSmallestDomain(self.domains2))
+        self.assertEqual('v2', dist.findSmallestDomain(self.domains1))
+        self.assertEqual('v2', dist.findSmallestDomain(self.domains2))
 
     def testFindLargestDomain(self):
         """tests that the largest domain is indeed the largest one"""
         dist = self.buildDistributor()
-        self.assertEquals('v3', dist.findLargestDomain(self.domains1))
-        self.assertEquals('v3', dist.findLargestDomain(self.domains2))
+        self.assertEqual('v3', dist.findLargestDomain(self.domains1))
+        self.assertEqual('v3', dist.findLargestDomain(self.domains2))
 
     def testSingleValueDomainNotDistributed(self):
         """tests that a domain of size 1 is not distributed"""
@@ -128,7 +129,7 @@ def get_all_cases(module):
     all_cases = []
     for name in dir(module):
         obj = getattr(module, name)
-        if type(obj) in (types.ClassType, types.TypeType) and \
+        if type(obj) in (type, type) and \
                issubclass(obj, unittest.TestCase) and \
                not name.startswith('Abstract'):
             all_cases.append(obj)

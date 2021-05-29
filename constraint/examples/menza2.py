@@ -3,7 +3,7 @@ Solve a puzzle that got discussed on c.l.p. on october 2002
 
 ABC*DE=FGHIJ with all letters different and in domain [0,9]
 """
-from __future__ import generators
+
 
 from logilab.constraint import *
 from logilab.constraint.distributors import DichotomyDistributor
@@ -22,7 +22,7 @@ class DistinctDigits(BasicConstraint):
                     if s.count(d) not in (0,1):
                         domain.removeValue(v)
                         break
-        except ConsistencyFailure, e:
+        except ConsistencyFailure as e:
             raise ConsistencyFailure('inconsistency while applying %s'%repr(self))
         return 1
         
@@ -42,8 +42,8 @@ def mensa() :
     constraints = []
 
     # x = ABC and y = DE, x*y = FGHIJ
-    domains['x'] = fd.FiniteDomain(range(0,1000))
-    domains['y'] = fd.FiniteDomain(range(0,100))
+    domains['x'] = fd.FiniteDomain(list(range(0,1000)))
+    domains['y'] = fd.FiniteDomain(list(range(0,100)))
     
     # x and y *must* have distinct digits themselves
     # (for example this will remove 232 from x's domain)
@@ -71,12 +71,14 @@ if __name__ == '__main__' :
             display = 1
 
     r = mensa()
-    print 'problem created. let us solve it.'
+    print('problem created. let us solve it.')
     s = []
     for sol in Solver().solve_all(r,verbose):
         s.append(sol)
         if display:
             sol['c'] = sol['x']*sol['y']
-            print "%(x)s x %(y)s = %(c)s" % sol
+            __fmt_str = "%(x)s x %(y)s = %(c)s" 
+            print(__fmt_str % sol)
     if not display:
-        print 'Found %d solutions'%len(s)
+        __fmt_str = 'Found %d solutions'
+        print(__fmt_str %len(s))

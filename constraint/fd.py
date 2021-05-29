@@ -26,7 +26,7 @@ This module provides the following usable classes:
 The Expression and BinaryExpression classes can be constructed using the
 make_expression factory function.  """
 
-from __future__ import generators
+
 
 import operator
 
@@ -93,7 +93,7 @@ class FiniteDomain(AbstractDomain):
     
     def getValues(self):
         """return all the values in the domain"""
-        return self._values.keys()
+        return list(self._values.keys())
 
     def __iter__(self):
         return iter(self._values)
@@ -220,19 +220,19 @@ class Expression(AbstractConstraint):
         result_cache = self._init_result_cache()
         for kwargs in self._assign_values(domains):
             if maybe_entailed:
-                for var, val in kwargs.iteritems():
+                for var, val in kwargs.items():
                     if val not in result_cache[var]:
                         break
                 else:
                     continue
             if ffunc(**kwargs):
-                for var, val in kwargs.items():
+                for var, val in list(kwargs.items()):
                     result_cache[var][val] = 1
             else:
                 maybe_entailed = 0
 
         try:
-            for var, keep in result_cache.iteritems():
+            for var, keep in result_cache.items():
                 domain = domains[var]
                 domain.removeValues([val for val in domain if val not in keep])
                 
@@ -299,7 +299,7 @@ class BinaryExpression(Expression):
             raise ConsistencyFailure('Inconsistency while applying %s' % \
                                      repr(self))
         except Exception:
-            print self, kwargs
+            print(self, kwargs)
             raise 
         return maybe_entailed
 
@@ -310,7 +310,7 @@ def make_expression(variables, formula, constraint_type=None):
     # encode unicode
     vars = []
     for var in variables:
-        if type(var) == type(u''):
+        if type(var) == type(''):
             vars.append(var.encode())
         else:
             vars.append(var)

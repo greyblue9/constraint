@@ -16,17 +16,18 @@
 # USA.
 """The code of the constraint propagation algorithms"""
 
-from __future__ import generators
+
 from operator import mul as MUL
 from time import strftime
 from logilab.constraint.interfaces import DomainInterface, ConstraintInterface
 from logilab.constraint.psyco_wrapper import Psyobj
 from logilab.common.compat import enumerate
+from functools import reduce
 
 def _default_printer(*msgs):
     for msg in msgs[:-1]:
-        print msg,
-    print msgs[-1]
+        print(msg,)
+    print(msgs[-1])
 class ConsistencyFailure(Exception):
     """The repository is not in a consistent state"""
     pass
@@ -41,7 +42,7 @@ class Repository(Psyobj):
         self._printer = printer
         
         for i, var in enumerate(variables):
-            if type(var) == type(u''):
+            if type(var) == type(''):
                 variables[i] = var.encode()
                 
         self._variables = variables   # list of variable names
@@ -51,7 +52,7 @@ class Repository(Psyobj):
         self._variableListeners = {}
         for var in self._variables:
             self._variableListeners[var] = []
-            assert self._domains.has_key(var)
+            assert var in self._domains
         for constr in constraints or ():
             self.addConstraint(constr)
 
@@ -97,7 +98,7 @@ class Repository(Psyobj):
         i = 0
         for constraint in self._constraints:
             key = constraint.type
-            if not type_colors.has_key(key):
+            if key not in type_colors:
                 type_colors[key] = color_index
                 color_index += 1
             affected_vars = constraint.affectedVariables()
@@ -116,7 +117,7 @@ class Repository(Psyobj):
                 printer.edge(var1, n_id, arrowstyle='none',
                              color=EDGE_ATTRS['color'][type_colors[key]])
         # self._printer( legend)
-        for node_type, color in type_colors.items():
+        for node_type, color in list(type_colors.items()):
             printer.node(node_type, shape='box',
                          color=EDGE_ATTRS['color'][color])
         printer.close_graph()
@@ -221,7 +222,7 @@ class Repository(Psyobj):
                 if constraint in _affected_constraints:
                     del _affected_constraints[constraint]
                 
-        for domain in self._domains.itervalues():
+        for domain in self._domains.values():
             if domain.size() != 1:
                 return 0
         return 1
@@ -247,7 +248,7 @@ class Solver(Psyobj):
         try:
             # XXX  FIXME: this is a workaround a bug in psyco-1.4
 ##             return  self._solve(repository).next()
-            return  self._solve(repository, 0).next()
+            return  next(self._solve(repository, 0))
         except StopIteration:
             return
         
@@ -294,13 +295,13 @@ class Solver(Psyobj):
             repository.display_vars()
         try:
             foundSolution = repository.consistency(verbose, custom_printer=self.printer)
-        except ConsistencyFailure, exc:
+        except ConsistencyFailure as exc:
             if verbose:
                 self.printer( strftime('%H:%M:%S'), exc)
         else:
             if foundSolution:
                 solution = {}
-                for variable, domain in repository.getDomains().items():
+                for variable, domain in list(repository.getDomains().items()):
                     solution[variable] = domain.getValues()[0]
                 if verbose:
                     self.printer( strftime('%H:%M:%S'), '### Found Solution', solution)

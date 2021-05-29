@@ -22,7 +22,7 @@ the smallest domain in at most N subdomains."""
 # USA.
 
 
-from __future__ import generators
+
 
 from logilab.constraint import *
 from logilab.constraint.distributors import *
@@ -34,7 +34,7 @@ def rooks(size=8,verbose=0):
     for i in range(size):
         name = 'R%02d'%i
         variables.append(name)
-        domains[name] = fd.FiniteDomain( range(size) )
+        domains[name] = fd.FiniteDomain( list(range(size)) )
 
     for r1 in range(size):
         for r2 in range(size):
@@ -54,7 +54,7 @@ def rooks(size=8,verbose=0):
 def draw_solution(s):
     size = len(s)
     board = ''
-    queens = s.items()
+    queens = list(s.items())
     queens.sort()
     board += '_'*(size*2+1)+'\n'
     for i in range(size):
@@ -66,7 +66,7 @@ def draw_solution(s):
                 board+='|R'
         board+='|\n'
     board += '¯'*(size*2+1)
-    print board
+    print(board)
 
 
 def main(args = None):
@@ -92,14 +92,16 @@ def main(args = None):
     for sol in rooks(size,verbose):
         count += 1
         if display:
-            print 'solution #%d'%count
+            __fmt_str = 'solution #%d'
+            print(__fmt_str %count)
             draw_solution(sol)
-            print '*'*80
+            __fmt_str = '*'
+            print(__fmt_str *80)
         if first:
             break
     if not display:
-        print 'Use -d option to display solutions'
-    print count,'solutions found.'
+        print('Use -d option to display solutions')
+    print(count,'solutions found.')
 
 if __name__ == '__main__':
 ##     import hotshot

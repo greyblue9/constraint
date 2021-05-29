@@ -2,7 +2,7 @@ try:
     import psyco
     psyco.full()
 except ImportError:
-    print 'Psyco not available'
+    print('Psyco not available')
 
 def menza():
     sol = []
@@ -15,9 +15,9 @@ def menza():
                 digits.sort()
                 if digits == all_digits :
                     sol.append({'a': a, 'b': b})
-                    print "%.3d x %.2d = %.5d" % (a, b, c)
+                    print("%.3d x %.2d = %.5d" % (a, b, c))
     return sol
 
 if __name__ == '__main__':
     sol = menza()
-    print len(sol)
+    print(len(sol))

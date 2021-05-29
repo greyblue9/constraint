@@ -116,7 +116,7 @@ def export(from_dir, to_dir,
                 continue
             src = '%s/%s' % (directory, filename)
             dest = to_dir + src[len(from_dir):]
-            print >> sys.stderr, src, '->', dest
+            sys.stderr.writelines("%s\n" % " ".join([src, '->', dest]))
             if os.path.isdir(src):
                 if not exists(dest):
                     os.mkdir(dest)
@@ -126,7 +126,7 @@ def export(from_dir, to_dir,
                 shutil.copy2(src, dest)
     try:
         os.mkdir(to_dir)
-    except OSError, ex:
+    except OSError as ex:
         # file exists ?
         import errno
         if ex.errno != errno.EEXIST:
@@ -180,7 +180,7 @@ def install(**kwargs):
     if USE_SETUPTOOLS and install_requires:
         kwargs['install_requires'] = install_requires
     kwargs['packages'] = packages
-    return setup(name = distname,
+    return dict(name = distname,
                  version = version,
                  license = license,
                  description = short_desc,
@@ -196,5 +196,7 @@ def install(**kwargs):
                  **kwargs
                  )
             
+setup_args = None
 if __name__ == '__main__' :
-    install()
+    setup_args = install()
+    ptint(f"setup_args = {setup_args}")

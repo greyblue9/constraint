@@ -39,7 +39,8 @@ def queens(size=8,verbose=0):
                                                       {'q1':q1,'q2':q2}))
     r = Repository(variables,domains,constraints)
     s = Solver().solve(r,verbose)
-    print 'Number of solutions:',len(s)
+    __fmt_str = 'Number of solutions:'
+    print(__fmt_str ,len(s))
 
 if __name__ == '__main__':
     import profile

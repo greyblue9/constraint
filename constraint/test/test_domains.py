@@ -64,7 +64,7 @@ class AbstractDomainTC(unittest.TestCase):
 
 class SuiteDomainTC(AbstractDomainTC):
     def setUp(self):
-        self.values = range(3)
+        self.values = list(range(3))
         self.domain = fd.FiniteDomain(self.values)
 
 
@@ -74,7 +74,7 @@ def get_all_cases(module):
     all_cases = []
     for name in dir(module):
         obj = getattr(module, name)
-        if type(obj) in (types.ClassType, types.TypeType) and \
+        if type(obj) in (type, type) and \
                issubclass(obj, unittest.TestCase) and \
                not name.startswith('Abstract'):
             all_cases.append(obj)

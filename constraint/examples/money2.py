@@ -27,7 +27,7 @@ def money(verbose=0):
       -------
        MONEY
     """
-    digits = range(10)
+    digits = list(range(10))
     variables = list('sendmory')
     domains = {}
     constraints = []
@@ -49,15 +49,19 @@ def money(verbose=0):
     return s
 
 def display_solution(d):
-    print '  SEND\t  \t','  %(s)d%(e)d%(n)d%(d)d'%d
-    print '+ MORE\t  \t','+ %(m)d%(o)d%(r)d%(e)d'%d
-    print '------\t-->\t','------'
-    print ' MONEY\t  \t',' %(m)d%(o)d%(n)d%(e)d%(y)d'%d
+    __fmt_str = '  SEND\t  \t'
+    print(__fmt_str ,'  %(s)d%(e)d%(n)d%(d)d'%d)
+    __fmt_str = '+ MORE\t  \t'
+    print(__fmt_str ,'+ %(m)d%(o)d%(r)d%(e)d'%d)
+    __fmt_str = '------\t-->\t'
+    print(__fmt_str ,'------')
+    __fmt_str = ' MONEY\t  \t'
+    print(__fmt_str ,' %(m)d%(o)d%(n)d%(e)d%(y)d'%d)
 
 if __name__ == '__main__':
-    print 'WARNING!'
-    print 'This example takes looooooooooooooots of CPU to complete.'
-    print 'try money.py for a faster version.'
+    print('WARNING!')
+    print('This example takes looooooooooooooots of CPU to complete.')
+    print('try money.py for a faster version.')
     import sys, getopt
     opts, args = getopt.getopt(sys.argv[1:], 'dv')
     verbose = 0
@@ -71,4 +75,4 @@ if __name__ == '__main__':
     if display:
         display_solution(sol)
     else:
-        print sol
+        print(sol)

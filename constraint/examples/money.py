@@ -26,7 +26,7 @@ def money(verbose=0):
       -------
        MONEY
     """
-    digits = range(10)
+    digits = list(range(10))
     variables = list('sendmory')
     domains = {}
     constraints = []
@@ -52,11 +52,15 @@ def money(verbose=0):
 
 def display_solution(d):
     for s in d:
-        print '  SEND\t  \t','  %(s)d%(e)d%(n)d%(d)d'%s
-        print '+ MORE\t  \t','+ %(m)d%(o)d%(r)d%(e)d'%s
-        print '------\t-->\t','------'
-        print ' MONEY\t  \t',' %(m)d%(o)d%(n)d%(e)d%(y)d'%s
-        print 
+        __fmt_str = '  SEND\t  \t'
+        print(__fmt_str ,'  %(s)d%(e)d%(n)d%(d)d'%s)
+        __fmt_str = '+ MORE\t  \t'
+        print(__fmt_str ,'+ %(m)d%(o)d%(r)d%(e)d'%s)
+        __fmt_str = '------\t-->\t'
+        print(__fmt_str ,'------')
+        __fmt_str = ' MONEY\t  \t'
+        print(__fmt_str ,' %(m)d%(o)d%(n)d%(e)d%(y)d'%s)
+        print() 
 
 if __name__ == '__main__':
     import sys, getopt
@@ -72,4 +76,4 @@ if __name__ == '__main__':
     if display:
         display_solution([sol])
     else:
-        print sol
+        print(sol)

@@ -77,7 +77,7 @@ def draw_solution(sol, size):
     board = ''
     board += '_'*(size*3+1)+'\n'
     squares = {}
-    for t in sol.items():
+    for t in list(sol.items()):
         squares[(t[1][0]*size)+t[1][1]]=t[0]   
     for i in range(size):
         for j in range(size):
@@ -88,7 +88,7 @@ def draw_solution(sol, size):
             board+='|%02s'%intsquare
         board+='|\n'
     board += '¯'*(size*3+1)+'\n'
-    print board
+    print(board)
 
 
 if __name__ == '__main__':
@@ -108,5 +108,5 @@ if __name__ == '__main__':
     count = 0
     sol = knight_tour(size,verbose)
     if display:
-        print 'Solution found:'
+        print('Solution found:')
         draw_solution(sol,size)

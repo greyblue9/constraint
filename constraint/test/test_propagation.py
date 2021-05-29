@@ -28,7 +28,7 @@ class Repository_TC(unittest.TestCase):
         self.domains = {}
         self.variables = list('abcdef')
         for v in self.variables:
-            self.domains[v] = fd.FiniteDomain(range(6))
+            self.domains[v] = fd.FiniteDomain(list(range(6)))
 
         self.repo = Repository(self.variables, self.domains)
 
@@ -41,7 +41,7 @@ class Repository_TC(unittest.TestCase):
         try:
             try:
                 self.repo.vcg_draw('toto.vcg')
-            except IOError, exc:
+            except IOError as exc:
                 self.fail('This test cannot run in the testing environment'
                           'because I cannot write the file.\n'
                           'The error message was: \n%s' % exc)
@@ -62,7 +62,7 @@ class Repository_TC(unittest.TestCase):
 
     def testConsistencyNoConstraint(self):
         self.repo.consistency()
-        for v, dom in self.repo.getDomains().items():
+        for v, dom in list(self.repo.getDomains().items()):
             self.assertEqual(dom.size(),6)
 
     def testConsistency(self):
@@ -73,7 +73,7 @@ class Repository_TC(unittest.TestCase):
                                                            '%s < %s'%(v1, v2)))
 
         self.repo.consistency()
-        for v, dom in self.repo.getDomains().items():
+        for v, dom in list(self.repo.getDomains().items()):
             self.assertEqual(dom.size(),1)
 
     def testInconsistency(self):
@@ -95,7 +95,7 @@ class Sover_TC(unittest.TestCase):
         self.domains = {}
         self.variables = list('abcdef')
         for v in self.variables:
-            self.domains[v] = fd.FiniteDomain(range(6))
+            self.domains[v] = fd.FiniteDomain(list(range(6)))
 
         self.repo = Repository(self.variables, self.domains)
         for v1 in self.variables:
@@ -136,7 +136,7 @@ class SolverBest_TC(unittest.TestCase):
         self.domains = {}
         self.variables = list('abc')
         for v in self.variables:
-            self.domains[v] = fd.FiniteDomain(range(6))
+            self.domains[v] = fd.FiniteDomain(list(range(6)))
 
         self.repo = Repository(self.variables, self.domains)
         for v1 in self.variables:
@@ -157,8 +157,8 @@ class SolverBest_TC(unittest.TestCase):
         sorted_costs = costs[:]
         sorted_costs.sort()
         sorted_costs.reverse()
-        self.assertEquals(costs, sorted_costs)
-        self.assertEquals(costs, [s[1] for s in solutions])
+        self.assertEqual(costs, sorted_costs)
+        self.assertEqual(costs, [s[1] for s in solutions])
 
                          
 

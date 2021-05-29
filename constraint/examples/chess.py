@@ -56,7 +56,7 @@ class QueensConstraint(AbstractConstraint):
             raise ConsistencyFailure('Inconsistency while applying %s' % \
                                      repr(self))
         except Exception:
-            print self, kwargs
+            print(self, kwargs)
             raise 
         return maybe_entailed
             
