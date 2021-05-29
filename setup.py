@@ -11,7 +11,8 @@ __docformat__ = "restructuredtext en"
 import os
 import sys
 import shutil
-from os.path import isdir, exists, join, walk
+from os.path import isdir, exists, join
+from os import walk
 
 try:
     from setuptools import setup
@@ -24,7 +25,7 @@ except ImportError:
     
 
 # import required features
-from __pkginfo__ import modname, version, license, short_desc, long_desc, \
+from logilab.constraint.__pkginfo__ import modname, version, license, short_desc, long_desc, \
      web, author, author_email
 # import optional features
 try:
@@ -116,7 +117,7 @@ def export(from_dir, to_dir,
                 continue
             src = '%s/%s' % (directory, filename)
             dest = to_dir + src[len(from_dir):]
-            sys.stderr.writelines("%s\n" % " ".join([src, '->', dest]))
+            print >> sys.stderr, src, '->', dest
             if os.path.isdir(src):
                 if not exists(dest):
                     os.mkdir(dest)
@@ -196,7 +197,5 @@ def install(**kwargs):
                  **kwargs
                  )
             
-setup_args = None
 if __name__ == '__main__' :
-    setup_args = install()
-    ptint(f"setup_args = {setup_args}")
+    print(setup_data := install())

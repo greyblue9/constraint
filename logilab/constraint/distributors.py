@@ -97,8 +97,8 @@ class NaiveDistributor(AbstractDistributor):
         values = dom1[variable].getValues()
         if self.verbose:
             __fmt_str = 'Distributing domain for variable'
-            print(__fmt_str , variable, \)
-                  'at value', values[0]
+            print(__fmt_str , variable, \
+                  'at value', values[0])
         dom1[variable].removeValues(values[1:])
         dom2[variable].removeValue(values[0])
         return (dom1[variable], dom2[variable])
@@ -119,8 +119,8 @@ class RandomizingDistributor(AbstractDistributor):
         values.remove(distval)
         if self.verbose:
             __fmt_str = 'Distributing domain for variable'
-            print(__fmt_str , variable, \)
-                  'at value', distval
+            print(__fmt_str , variable, \
+                  'at value', distval)
         dom1[variable].removeValues(values)
         dom2[variable].removeValue(distval)
         return (dom1[variable], dom2[variable])
